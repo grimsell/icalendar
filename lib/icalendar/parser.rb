@@ -98,14 +98,14 @@ module Icalendar
         if fields[:name] == 'end'
           break
         elsif fields[:name] == 'begin'
-          klass_name = fields[:value].gsub(/\AV/, '').downcase.capitalize
+          klass_name = fields[:value].gsub(/\AV/, '').underscore.capitalize
           Icalendar.logger.debug "Adding component #{klass_name}"
           if Icalendar.const_defined? klass_name
             component.add_component parse_component(Icalendar.const_get(klass_name).new)
           elsif Icalendar::Timezone.const_defined? klass_name
             component.add_component parse_component(Icalendar::Timezone.const_get(klass_name).new)
           else
-            component.add_component parse_component(Component.new klass_name.downcase, fields[:value])
+            component.add_component parse_component(Component.new klass_name.underscore, fields[:value])
           end
         else
           parse_property component, fields
